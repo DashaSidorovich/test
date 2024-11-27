@@ -4,8 +4,10 @@ sap.ui.define([
   "sap/ui/model/json/JSONModel",
   "zjblessons/ControlTaskSidorovich/model/formatter",
   "sap/ui/model/Filter",
-  "sap/ui/model/FilterOperator"
-], function (BaseController, JSONModel, formatter, Filter, FilterOperator) {
+  "sap/ui/model/FilterOperator",
+  		"sap/m/MessageBox"
+
+], function (BaseController, JSONModel, formatter, Filter, FilterOperator, MessageBox) {
   "use strict";
 
   return BaseController.extend("zjblessons.ControlTaskSidorovich.controller.Worklist", {
@@ -13,7 +15,7 @@ sap.ui.define([
     onInit: function () {
     					var oViewModel;
     		oViewModel = new JSONModel({
-					
+					 sID: 0
 				});
 				this.setModel(oViewModel, "worklistView");
 
@@ -53,14 +55,46 @@ sap.ui.define([
     oTable.getBinding("rows").filter(aFilter);
 },
 
+onItemSelect: function(oEvent) {
+    var context = this;
+    const oTable = this.byId("persoTable"); 
+    const aSelectedIndices = oTable.getSelectedIndices(); 
 
-    onItemSelect(oEvent){
-				const oSelectedItem = oEvent.getParameter('listItem'),
-					sHeaderID = oSelectedItem.getBindingContext().getProperty('MaterialID');
-					this.getRouter().navTo("object", {
-					objectId: sObjectID
+    if (aSelectedIndices.length > 0) {
+        const iSelectedIndex = aSelectedIndices[0]; 
+        const oSelectedItem = oTable.getContextByIndex(iSelectedIndex); 
+
+        if (oSelectedItem) {
+        	context.getModel('worklistView').setProperty('/sID', oSelectedItem.getProperty("MaterialID"));
+
+        }
+    } else {
+        alert("Нет выбранных элементов");
+    }
+},
+onShow: function(oEvent      ){
+	    var context = this;
+
+	MessageBox.confirm(this.getResourceBundle().getText("MaterialID"), {
+				title: context.getModel('worklistView').getProperty('/sID'),                                    
+    			actions: [sap.m.MessageBox.Action.OK,
+            	sap.m.MessageBox.Action.CANCEL],         
+    			emphasizedAction: sap.m.MessageBox.Action.OK,
+    			onClose: function(oAction){
+					if(oAction === sap.m.MessageBox.Action.OK) {
+						this.getModel().remove(key,
+						{
+							success: function(oData){
+							var msg = this.getResourceBundle().getText("successDelete");
+							MessageToast.show(msg);
+							}.bind(this)
+						});
+					}
+				}.bind(this)
 				});
-			},
+},
+
+
 
     openPersoDialog: function (oEvt) {
       const oTable = this.byId("persoTable");

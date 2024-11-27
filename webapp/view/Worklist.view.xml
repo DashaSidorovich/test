@@ -17,7 +17,6 @@
                     <m:ToolbarSeparator/>
                     <vm:VariantManagement id="p13nVm" for="persoTable"/>
                     <m:ToolbarSpacer/>
-                    <m:Button icon="sap-icon://action-settings" press="openPersoDialog"/>
                 </m:OverflowToolbar>
   	</m:customHeader>
   	
@@ -27,13 +26,17 @@
       id="persoTable"
       columnMove="onColumnMove"
       rowMode="Auto"
+rowSelectionChange="onItemSelect"
       ariaLabelledBy="title"
+      selectionMode="Single"
       rows="{/zjblessons_base_Materials}">
       <extension>
         <m:OverflowToolbar>
           <m:Title id="title" text="Materials"/>
           <m:ToolbarSpacer/>
-          <m:Button icon="sap-icon://action-settings" press="openPersoDialog"/>
+          <m:Button icon="sap-icon://action-settings" press="onShow"/>
+          
+          
         </m:OverflowToolbar>
       </extension>
       <dependents>
@@ -66,12 +69,7 @@
             <m:Text text="{Created}"/>
           </template>
         </Column>
-        <Column>
-          <template>
-          	          <m:Button press="onItemSelect" icon="sap-icon://sort"/>
-
-          </template>
-        </Column>
+        
       </columns>
     </Table>
       	</m:content>
