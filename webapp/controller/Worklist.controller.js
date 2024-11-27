@@ -38,14 +38,29 @@ sap.ui.define([
         }
       });
     },
+    onFilterChange: function(oEvent) {
+    const sFilter = oEvent.getParameter("value"); 
+    const oTable = this.byId("persoTable"); 
 
-    onItemSelect: function (oEvent) {
-      const oSelectedItem = oEvent.getParameter("listItem");
-      const sHeaderID = oSelectedItem.getBindingContext().getProperty("HeaderID");
-      this.getRouter().navTo("object", {
-        objectId: sHeaderID
-      });
-    },
+    if (!sFilter) {
+        oTable.getBinding("rows").filter([]);
+    }
+    const aFilter = [];
+			
+				aFilter.push(new Filter("MaterialID", sap.ui.model.FilterOperator.Contains, sFilter));
+			
+
+    oTable.getBinding("rows").filter(aFilter);
+},
+
+
+    onItemSelect(oEvent){
+				const oSelectedItem = oEvent.getParameter('listItem'),
+					sHeaderID = oSelectedItem.getBindingContext().getProperty('MaterialID');
+					this.getRouter().navTo("object", {
+					objectId: sObjectID
+				});
+			},
 
     openPersoDialog: function (oEvt) {
       const oTable = this.byId("persoTable");

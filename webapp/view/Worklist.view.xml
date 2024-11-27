@@ -9,6 +9,20 @@
   xmlns:semantic="sap.f.semantic">
 
   <m:Page id="page" title="Worklist">
+  	
+  	<m:customHeader>
+  		<m:OverflowToolbar>
+                    <m:Title id="title2" text="Persons"/>
+                    <m:Input id="inputFilter" width="20%" liveChange="onFilterChange"/>
+                    <m:ToolbarSeparator/>
+                    <vm:VariantManagement id="p13nVm" for="persoTable"/>
+                    <m:ToolbarSpacer/>
+                    <m:Button icon="sap-icon://action-settings" press="openPersoDialog"/>
+                </m:OverflowToolbar>
+  	</m:customHeader>
+  	
+  	<m:content>
+  		
     <Table
       id="persoTable"
       columnMove="onColumnMove"
@@ -52,7 +66,15 @@
             <m:Text text="{Created}"/>
           </template>
         </Column>
+        <Column>
+          <template>
+          	          <m:Button press="onItemSelect" icon="sap-icon://sort"/>
+
+          </template>
+        </Column>
       </columns>
     </Table>
+      	</m:content>
+
   </m:Page>
 </mvc:View>
