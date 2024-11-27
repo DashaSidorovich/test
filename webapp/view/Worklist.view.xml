@@ -1,80 +1,58 @@
 <mvc:View
-	controllerName="zjblessons.ControlTaskSidorovich.controller.Worklist"
-	xmlns="sap.m"
-	xmlns:mvc="sap.ui.core.mvc"
-	xmlns:semantic="sap.f.semantic">
+  controllerName="zjblessons.ControlTaskSidorovich.controller.Worklist"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns:m="sap.m"
+  xmlns="sap.ui.table"
+  xmlns:columnmenu="sap.m.table.columnmenu"
+  xmlns:sap.ui.fl="sap.ui.fl"
+  xmlns:vm="sap.ui.fl.variants"
+  xmlns:semantic="sap.f.semantic">
 
-	<semantic:SemanticPage
-		id="page"
-		headerPinnable="false"
-		toggleHeaderOnTitleClick="false">
-
-		<semantic:titleHeading>
-			<Title text="{i18n>worklistTitle}" />
-		</semantic:titleHeading>
-
-		<semantic:content>
-			<Table
-				id="table"
-				width="auto"
-				items="{
-					path: '/zjblessons_base_Materials',
-					sorter: {
-						path: 'Created',
-						descending: false
-					}
-				}"
-				noDataText="{worklistView>/tableNoDataText}"
-				busyIndicatorDelay="{worklistView>/tableBusyDelay}"
-				growing="true"
-				growingScrollToLoad="true"
-				updateFinished="onUpdateFinished">
-
-				<headerToolbar>
-					<Toolbar>
-						<Title id="tableHeader" text="{worklistView>/worklistTableTitle}"/>
-						<ToolbarSpacer />
-						<SearchField
-							id="searchField"
-							tooltip="{i18n>worklistSearchTooltip}"
-							search="onSearch"
-							width="auto">
-						</SearchField>
-					</Toolbar>
-				</headerToolbar>
-
-				<columns>
-					<Column id="nameColumn">
-						<Text text="{i18n>tableNameColumnTitle}" id="nameColumnTitle"/>
-					</Column>
-					<Column id="unitNumberColumn" hAlign="End">
-						<Text text="{i18n>tableUnitNumberColumnTitle}" id="unitNumberColumnTitle"/>
-					</Column>
-				</columns>
-
-				<items>
-					<ColumnListItem
-						type="Navigation"
-						press="onPress">
-						<cells>
-							<ObjectIdentifier
-								title="{Created}"/>
-							<ObjectNumber
-								number="{
-									path: 'Rating',
-									formatter: '.formatter.numberUnit'
-								}"/>
-						</cells>
-					</ColumnListItem>
-				</items>
-			</Table>
-		</semantic:content>
-
-		<semantic:sendEmailAction>
-			<semantic:SendEmailAction id="shareEmail" press="onShareEmailPress"/>
-		</semantic:sendEmailAction>
-
-
-	</semantic:SemanticPage>
-
+  <m:Page id="page" title="Worklist">
+    <Table
+      id="persoTable"
+      columnMove="onColumnMove"
+      rowMode="Auto"
+      ariaLabelledBy="title"
+      rows="{/zjblessons_base_Materials}">
+      <extension>
+        <m:OverflowToolbar>
+          <m:Title id="title" text="Materials"/>
+          <m:ToolbarSpacer/>
+          <m:Button icon="sap-icon://action-settings" press="openPersoDialog"/>
+        </m:OverflowToolbar>
+      </extension>
+      <dependents>
+        <columnmenu:Menu id="menu">
+          <columnmenu:items>
+            <columnmenu:ActionItem icon="sap-icon://sort" label="Sort" press="onColumnHeaderItemPress"/>
+            <columnmenu:ActionItem icon="sap-icon://table-column" label="Columns" press="onColumnHeaderItemPress"/>
+          </columnmenu:items>
+        </columnmenu:Menu>
+      </dependents>
+      <noData>
+        <m:IllustratedMessage enableVerticalResponsiveness="true" title="No Data Available"/>
+      </noData>
+      <columns>
+        <Column>
+          <m:Label text="Material ID"/>
+          <template>
+            <m:Text text="{MaterialID}"/>
+          </template>
+        </Column>
+        <Column>
+          <m:Label text="Rating"/>
+          <template>
+            <m:Text text="{Rating}"/>
+          </template>
+        </Column>
+        <Column>
+          <m:Label text="Created"/>
+          <template>
+            <m:Text text="{Created}"/>
+          </template>
+        </Column>
+      </columns>
+    </Table>
+  </m:Page>
 </mvc:View>
